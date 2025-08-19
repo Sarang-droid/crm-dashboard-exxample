@@ -15,20 +15,20 @@ function renderTable(filteredDocs = documents) {
     const tableBody = document.getElementById('docsTable');
     tableBody.innerHTML = '';
 
-filteredDocs.forEach(doc => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td class="p-3">${doc.fileName}</td>
-        <td class="p-3">${doc.property}</td>
-        <td class="p-3">${doc.uploadedBy}</td>
-        <td class="p-3">${doc.date}</td>
-        <td class="p-3">
-            <button class="text-blue-600 hover:underline" onclick="downloadDoc(${doc.id})">Download</button>
-            <button class="text-red-600 hover:underline ml-2" onclick="deleteDoc(${doc.id})">Delete</button>
+    filteredDocs.forEach(doc => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+        <td>${doc.fileName}</td>
+        <td>${doc.property}</td>
+        <td>${doc.uploadedBy}</td>
+        <td>${doc.date}</td>
+        <td>
+            <button class="btn btn-edit" onclick="downloadDoc(${doc.id})">Download</button>
+            <button class="btn btn-delete" onclick="deleteDoc(${doc.id})">Delete</button>
         </td>
     `;
-    tableBody.appendChild(row);
-});
+        tableBody.appendChild(row);
+    });
 }
 
 function filterDocuments() {
@@ -49,11 +49,11 @@ function filterDocuments() {
 }
 
 function openModal() {
-    document.getElementById('uploadDocModal').classList.remove('hidden');
+    document.getElementById('uploadDocModal').style.display = 'block';
 }
 
 function closeModal() {
-    document.getElementById('uploadDocModal').classList.add('hidden');
+    document.getElementById('uploadDocModal').style.display = 'none';
     document.getElementById('modalFileInput').value = '';
     document.getElementById('modalProperty').value = 'Sunset Villa';
 }
