@@ -82,7 +82,7 @@
             table { font-size: 0.9rem; }
         }
     </style>
-    </head>
+</head>
 <body>
     <div class="dashboard-container">
         <aside class="sidebar">
@@ -110,7 +110,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="documents.html">
+                        <a href="document.html">
                             <i class="fas fa-file-alt"></i>
                             <span>Documents</span>
                         </a>
@@ -128,7 +128,7 @@
                         </a>
                     </li>
                 </ul>
-            </nav>
+        </nav>
             <div class="sidebar-footer">
                 <div class="user-profile">
                     <img src="https://via.placeholder.com/40" alt="User">
@@ -170,13 +170,13 @@
                     <div class="filter-group">
                         <label for="stageFilter">Stage</label>
                         <select id="stageFilter">
-                            <option value="">All Stages</option>
-                            <option value="Identified">Identified</option>
-                            <option value="Negotiation">Negotiation</option>
-                            <option value="Due Diligence">Due Diligence</option>
-                            <option value="Closed">Closed</option>
-                            <option value="Dropped">Dropped</option>
-                        </select>
+                        <option value="">All Stages</option>
+                        <option value="Identified">Identified</option>
+                        <option value="Negotiation">Negotiation</option>
+                        <option value="Due Diligence">Due Diligence</option>
+                        <option value="Closed">Closed</option>
+                        <option value="Dropped">Dropped</option>
+                    </select>
                     </div>
                     <div class="filter-group">
                         <label for="propertyFilter">Property</label>
@@ -195,11 +195,11 @@
                                 <th onclick="sortTable('dealValue')">Deal Value</th>
                                 <th onclick="sortTable('closeDate')">Expected Close Date</th>
                                 <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dealsTable"></tbody>
-                    </table>
-                </div>
+                    </tr>
+                </thead>
+                <tbody id="dealsTable"></tbody>
+            </table>
+        </div>
             </main>
         </div>
 
@@ -220,12 +220,12 @@
                 <div class="form-group">
                     <label>Deal Stage</label>
                     <select id="modalStage">
-                        <option value="Identified">Identified</option>
-                        <option value="Negotiation">Negotiation</option>
-                        <option value="Due Diligence">Due Diligence</option>
-                        <option value="Closed">Closed</option>
-                        <option value="Dropped">Dropped</option>
-                    </select>
+                    <option value="Identified">Identified</option>
+                    <option value="Negotiation">Negotiation</option>
+                    <option value="Due Diligence">Due Diligence</option>
+                    <option value="Closed">Closed</option>
+                    <option value="Dropped">Dropped</option>
+                </select>
                 </div>
                 <div class="form-group">
                     <label>Deal Value</label>

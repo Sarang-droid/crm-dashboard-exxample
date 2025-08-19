@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "name": "crm-dashboard-exxample",
+  "builds": [
+    { "src": "Frontend/**", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/Frontend/index.html" },
+    { "src": "/(.*)", "dest": "/Frontend/$1" }
+  ]
+}
+
+
