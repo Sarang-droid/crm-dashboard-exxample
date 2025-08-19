@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents - CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-6">
+        <!-- Breadcrumb -->
+        <nav class="flex items-center text-gray-600 mb-4">
+            <a href="/dashboard" class="hover:text-blue-600">Dashboard</a>
+            <span class="mx-2">></span>
+            <span class="text-gray-800 font-semibold">Documents</span>
+        </nav>
+
+        <!-- Page Title -->
+        <h1 class="text-3xl font-bold mb-6">Documents</h1>
+
+        <!-- Filter and Upload -->
+        <div class="flex justify-between items-center mb-4">
+            <div class="flex space-x-4">
+                <input id="propertyFilter" type="text" placeholder="Filter by Property" class="border rounded p-2">
+                <select id="typeFilter" class="border rounded p-2">
+                    <option value="">All File Types</option>
+                    <option value="pdf">PDF</option>
+                    <option value="docx">DOCX</option>
+                    <option value="xlsx">XLSX</option>
+                </select>
+            </div>
+            <button id="uploadDocBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Upload Document</button>
+        </div>
+
+        <!-- Documents Table -->
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="p-3 text-left">File Name</th>
+                        <th class="p-3 text-left">Property</th>
+                        <th class="p-3 text-left">Uploaded By</th>
+                        <th class="p-3 text-left">Date</th>
+                        <th class="p-3 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="docsTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="uploadDocModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg w-full max-w-md">
+            <h2 class="text-xl font-bold mb-4">Upload Document</h2>
+            <div>
+                <label class="block mb-2">File</label>
+                <input id="modalFileInput" type="file" class="w-full border rounded p-2 mb-4" accept=".pdf,.docx,.xlsx">
+                <label class="block mb-2">Assign Property</label>
+                <select id="modalProperty" class="w-full border rounded p-2 mb-4">
+                    <option value="Sunset Villa">Sunset Villa</option>
+                    <option value="Downtown Loft">Downtown Loft</option>
+                    <option value="Riverside Condo">Riverside Condo</option>
+                    <option value="Hilltop Estate">Hilltop Estate</option>
+                    <option value="Beach House">Beach House</option>
+                </select>
+                <div class="flex justify-end space-x-2">
+                    <button id="cancelUploadBtn" class="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">Cancel</button>
+                    <button id="saveUploadBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="document.js"></script>
+</body>
+</html>

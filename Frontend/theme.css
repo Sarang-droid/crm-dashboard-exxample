@@ -1,0 +1,52 @@
+/* Theme Variables */
+:root {
+    --bg-main: #1a1a1a;
+    --bg-secondary: #2a2a2a;
+    --text-main: #e0e0e0;
+    --text-secondary: #999;
+    --accent: #3498db;
+    --card-bg: #2a2a2a;
+    --input-bg: #333;
+    --input-border: #555;
+    --sidebar-gradient: linear-gradient(135deg, #2c3e50, #3498db);
+}
+
+[data-theme="light"] {
+    --bg-main: #f5f6fa;
+    --bg-secondary: #fff;
+    --text-main: #222;
+    --text-secondary: #555;
+    --accent: #3498db;
+    --card-bg: #fff;
+    --input-bg: #f0f0f0;
+    --input-border: #ccc;
+    --sidebar-gradient: linear-gradient(135deg, #e0eafc, #3498db);
+}
+
+/* Apply variables */
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+}
+.sidebar {
+    background: var(--sidebar-gradient);
+    color: var(--text-main);
+}
+.main-content {
+    background-color: var(--bg-main);
+}
+.top-navbar, .filters-section, .properties-table, .card, .modal-content {
+    background: var(--bg-secondary);
+    color: var(--text-main);
+}
+input, select {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-main);
+}
+.card, .properties-table, .modal-content {
+    background: var(--card-bg);
+}
+a {
+    color: var(--accent);
+}

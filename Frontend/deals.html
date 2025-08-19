@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deals - Property CRM</title>
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+        .dashboard-container { display: flex; min-height: 100vh; }
+        .sidebar { width: 250px; background: var(--sidebar-gradient); color: var(--text-main); position: fixed; height: 100vh; left: 0; top: 0; z-index: 1000; overflow-y: auto; }
+        .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-header h2 { font-size: 1.5rem; font-weight: 600; }
+        .sidebar-nav ul { list-style: none; padding: 20px 0; }
+        .sidebar-nav li { margin: 5px 0; }
+        .sidebar-nav a { display: flex; align-items: center; padding: 12px 20px; color: rgba(255,255,255,0.8); text-decoration: none; transition: all 0.3s ease; }
+        .sidebar-nav a:hover, .sidebar-nav .active a { background-color: rgba(255,255,255,0.1); color: white; border-right: 3px solid #fff; }
+        .sidebar-nav i { margin-right: 12px; width: 16px; }
+        .sidebar-footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .user-profile { display: flex; align-items: center; }
+        .user-profile img { width: 40px; height: 40px; border-radius: 50%; margin-right: 12px; }
+        .user-profile h4 { font-size: 0.9rem; }
+        .user-profile p { font-size: 0.8rem; opacity: 0.7; }
+        .main-content { margin-left: 250px; flex: 1; min-height: 100vh; background-color: #1a1a1a; }
+        .top-navbar { background: #2a2a2a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
+        .breadcrumbs { display: flex; align-items: center; color: #999; font-size: 0.9rem; }
+        .breadcrumbs span { margin: 0 8px; }
+        .breadcrumbs .active { color: #3498db; }
+        .navbar-right { display: flex; align-items: center; gap: 20px; }
+        .search-bar { position: relative; }
+        .search-bar input { background: #333; border: 1px solid #555; padding: 8px 40px 8px 15px; border-radius: 6px; color: #e0e0e0; width: 300px; }
+        .search-bar i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #999; }
+        .icon-btn { background: none; border: none; color: #e0e0e0; font-size: 1.1rem; cursor: pointer; padding: 8px; border-radius: 4px; transition: background-color 0.3s; }
+        .icon-btn:hover { background-color: #333; }
+        .content-area { padding: 30px; min-height: calc(100vh - 80px); }
+        .page-header { margin-bottom: 30px; }
+        .page-header h1 { font-size: 2rem; margin-bottom: 8px; color: #fff; }
+        .page-header p { color: #999; font-size: 1rem; }
+        .filters-section { background: #2a2a2a; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+        .filter-group label { font-size: 0.9rem; color: #999; }
+        .filter-group select, .filter-group input { background: #333; border: 1px solid #555; padding: 8px 12px; border-radius: 4px; color: #e0e0e0; min-width: 150px; }
+        .properties-table { background: #2a2a2a; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #333; color: #fff; padding: 15px 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #555; }
+        td { padding: 15px 12px; border-bottom: 1px solid #333; }
+        tr:hover { background-color: #333; }
+        .floating-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: linear-gradient(135deg, #3498db, #2980b9); color: white; border: none; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 20px rgba(52, 152, 219, 0.4); transition: all 0.3s ease; z-index: 999; }
+        .floating-btn:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(52, 152, 219, 0.6); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; }
+        .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #2a2a2a; padding: 30px; border-radius: 8px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h2 { color: #fff; }
+        .close { font-size: 2rem; cursor: pointer; color: #999; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #999; font-size: 0.9rem; }
+        .form-group input, .form-group select { width: 100%; background: #333; border: 1px solid #555; padding: 10px 12px; border-radius: 4px; color: #e0e0e0; font-size: 1rem; }
+        .form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+        .btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; transition: opacity 0.3s; }
+        .btn:hover { opacity: 0.8; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-secondary { background: #666; color: white; }
+        /* Stage badge fallback (replaces Tailwind in JS) */
+        .stage-identified { background: #444; color: #e0e0e0; }
+        .stage-negotiation { background: #f39c12; color: #fff; }
+        .stage-due-diligence { background: #3498db; color: #fff; }
+        .stage-closed { background: #27ae60; color: #fff; }
+        .stage-dropped { background: #e74c3c; color: #fff; }
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .summary-card { padding: 16px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+            .main-content { margin-left: 0; }
+            .filters-section { flex-direction: column; align-items: stretch; }
+            .search-bar input { width: 100%; }
+            table { font-size: 0.9rem; }
+        }
+    </style>
+    </head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Property CRM</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="index.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="properties.html">
+                            <i class="fas fa-home"></i>
+                            <span>Properties</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="deals.html">
+                            <i class="fas fa-handshake"></i>
+                            <span>Deals</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="documents.html">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Documents</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="reports.html">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Reports</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="settings.html">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="https://via.placeholder.com/40" alt="User">
+                    <div>
+                        <h4>John Doe</h4>
+                        <p>Admin</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <header class="top-navbar">
+                <div class="navbar-left">
+                    <div class="breadcrumbs">
+                        <span>Dashboard</span>
+                        <i class="fas fa-chevron-right"></i>
+                        <span class="active">Deals</span>
+                    </div>
+                </div>
+                <div class="navbar-right">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search deals...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <button class="icon-btn" id="theme-toggle-btn" title="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <main class="content-area">
+                <div class="page-header">
+                    <h1>Deals</h1>
+                    <p>Track and manage your deal pipeline</p>
+                </div>
+
+                <div class="filters-section">
+                    <div class="filter-group">
+                        <label for="stageFilter">Stage</label>
+                        <select id="stageFilter">
+                            <option value="">All Stages</option>
+                            <option value="Identified">Identified</option>
+                            <option value="Negotiation">Negotiation</option>
+                            <option value="Due Diligence">Due Diligence</option>
+                            <option value="Closed">Closed</option>
+                            <option value="Dropped">Dropped</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="propertyFilter">Property</label>
+                        <input id="propertyFilter" type="text" placeholder="Filter by Property Name">
+                    </div>
+                </div>
+
+                <div class="summary-cards" id="summaryCards"></div>
+
+                <div class="properties-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('propertyName')">Property Name</th>
+                                <th>Deal Stage</th>
+                                <th onclick="sortTable('dealValue')">Deal Value</th>
+                                <th onclick="sortTable('closeDate')">Expected Close Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dealsTable"></tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+
+        <button class="floating-btn" id="addDealBtn"><i class="fas fa-plus"></i></button>
+    </div>
+
+    <div id="addDealModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Deal</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label>Property Name</label>
+                    <input id="modalPropertyName" type="text">
+                </div>
+                <div class="form-group">
+                    <label>Deal Stage</label>
+                    <select id="modalStage">
+                        <option value="Identified">Identified</option>
+                        <option value="Negotiation">Negotiation</option>
+                        <option value="Due Diligence">Due Diligence</option>
+                        <option value="Closed">Closed</option>
+                        <option value="Dropped">Dropped</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Deal Value</label>
+                    <input id="modalDealValue" type="number">
+                </div>
+                <div class="form-group">
+                    <label>Expected Close Date</label>
+                    <input id="modalCloseDate" type="date">
+                </div>
+                <div class="form-actions">
+                    <button id="cancelDealBtn" class="btn btn-secondary">Cancel</button>
+                    <button id="saveDealBtn" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Deal Modal -->
+    <div id="editDealModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Deal</h2>
+                <span class="close" onclick="closeEditDealModal()">&times;</span>
+            </div>
+            <form id="editDealForm">
+                <div class="form-group">
+                    <label for="editDealPropertyName">Property Name</label>
+                    <input id="editDealPropertyName" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDealStage">Deal Stage</label>
+                    <select id="editDealStage" required>
+                        <option value="Identified">Identified</option>
+                        <option value="Negotiation">Negotiation</option>
+                        <option value="Due Diligence">Due Diligence</option>
+                        <option value="Closed">Closed</option>
+                        <option value="Dropped">Dropped</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editDealValue">Deal Value</label>
+                    <input id="editDealValue" type="number" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCloseDate">Expected Close Date</label>
+                    <input id="editCloseDate" type="date" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditDealModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="deals.js"></script>
+    <script>
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            document.getElementById('theme-toggle-btn').innerHTML =
+                theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        }
+        document.getElementById('theme-toggle-btn').onclick = function() {
+            const current = localStorage.getItem('theme') || 'dark';
+            setTheme(current === 'dark' ? 'light' : 'dark');
+        };
+        setTheme(localStorage.getItem('theme') || 'dark');
+    </script>
+</body>
+</html>
